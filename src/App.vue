@@ -69,6 +69,21 @@
   </nav>
   <router-view />
 </template>
+<script>
+if (localStorage.getItem("temperatureUnit") === null) {
+  localStorage.setItem("temperatureUnit", "celsius");
+}
+
+// Close the navbar when the user clicks outside of it
+document.addEventListener("click", function (event) {
+  if (!event.target.closest(".navbar")) {
+    let navbar = document.querySelector(".navbar-collapse");
+    if (navbar.classList.contains("show")) {
+      navbar.classList.remove("show");
+    }
+  }
+});
+</script>
 <style>
 .nav-link {
   color: aliceblue !important;

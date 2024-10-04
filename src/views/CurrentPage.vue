@@ -13,7 +13,7 @@
             class="spinner-grow text-primary float-end"
           ></div>
           <div v-if="temperature_2m !== ''" class="float-end">
-            {{ temperature_2m }}C
+            {{ temperature_2m }}
           </div>
         </div>
       </div>
@@ -68,6 +68,7 @@ import CurrentInformation from "@/components/CurrentInformation.vue";
 export default {
   components: { CurrentInformation },
   setup() {
+    const temperatureUnit = localStorage.getItem("temperatureUnit");
     // Defining reactive variables
     const temperature_2m = ref("");
     const relative_humidity_2m = ref("");
@@ -86,6 +87,14 @@ export default {
           relative_humidity_2m.value = result.current.relative_humidity_2m;
           cloud_cover.value = result.current.cloud_cover;
           precipitation.value = result.current.precipitation;
+
+          // Converting temperature to the selected unit
+          if (temperatureUnit === "fahrenheit") {
+            temperature_2m.value =
+              String((result.current.temperature_2m * 9) / 5 + 32) + "°F";
+          } else {
+            temperature_2m.value = String(result.current.temperature_2m) + "°C";
+          }
         },
         (error) => {
           console.log(error);
