@@ -33,13 +33,15 @@ import CurrentInformation from "@/components/CurrentInformation.vue";
 import axios from "axios";
 import { Chart } from "chart.js/auto";
 import { ref } from "vue";
+import { getLocalStorageCoordinate } from "@/utilities/utils";
 
 let xLabels = ref([]);
 const temperatureUnit = localStorage.getItem("temperatureUnit");
 
 function getHourlyWeather() {
-  const apiUrl =
-    "https://api.open-meteo.com/v1/forecast?latitude=36.71&longitude=3&daily=temperature_2m_max,precipitation_probability_max&timezone=auto&forecast_days=16";
+  // get the lat and lon from localstorage
+  const coordinates = getLocalStorageCoordinate();
+  const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lon}&daily=temperature_2m_max,precipitation_probability_max&timezone=auto&forecast_days=16`;
   axios.get(apiUrl).then(
     (response) => {
       xLabels.value = response.data.daily.time;

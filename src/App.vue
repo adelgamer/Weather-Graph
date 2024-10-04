@@ -69,7 +69,11 @@
   </nav>
   <router-view />
 </template>
-<script>
+<script setup>
+import { CheckLocationInLocalStorage } from "./utilities/utils.js";
+
+CheckLocationInLocalStorage();
+
 if (localStorage.getItem("temperatureUnit") === null) {
   localStorage.setItem("temperatureUnit", "celsius");
 }

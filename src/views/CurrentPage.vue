@@ -64,6 +64,7 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import CurrentInformation from "@/components/CurrentInformation.vue";
+import { getLocalStorageCoordinate } from "../utilities/utils.js";
 
 export default {
   components: { CurrentInformation },
@@ -77,8 +78,9 @@ export default {
 
     // Get the current weather conditions
     function RequestCurrentWeather() {
-      const apiUrl =
-        "https://api.open-meteo.com/v1/forecast?latitude=36.71&longitude=3&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover&timezone=auto&forecast_days=1";
+      // get the lat and lon from localstorage
+      const coordinates = getLocalStorageCoordinate();
+      const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lon}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover&timezone=auto&forecast_days=1`;
       axios.get(apiUrl).then(
         (response) => {
           const result = response.data;

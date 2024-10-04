@@ -6,12 +6,13 @@
         <i class="bi bi-alarm"></i> {{ time }}
       </div>
     </div>
-    <p><i class="bi bi-geo-alt"></i> Alger, Draria</p>
+    <p><i class="bi bi-geo-alt"></i> {{ city }}</p>
   </div>
 </template>
 
 <script>
 import { onMounted, ref } from "vue";
+import { getCurrentSetLocation } from "@/utilities/utils";
 
 export default {
   name: "CurrentInformations",
@@ -19,6 +20,7 @@ export default {
     // Defining reactive variables
     const date = ref("20/11/2021");
     const time = ref("00:00:00");
+    const city = ref(getCurrentSetLocation());
 
     // Function to get the time
     function getTime() {
@@ -49,6 +51,7 @@ export default {
     return {
       date,
       time,
+      city,
     };
   },
 };
