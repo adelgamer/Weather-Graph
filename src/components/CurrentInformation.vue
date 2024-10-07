@@ -12,7 +12,7 @@
 
 <script>
 import { onMounted, ref } from "vue";
-import { getCurrentSetLocation } from "@/utilities/utils";
+import { getCurrentSetCity, getCurrentSetWilaya } from "@/utilities/utils";
 
 export default {
   name: "CurrentInformations",
@@ -20,7 +20,7 @@ export default {
     // Defining reactive variables
     const date = ref("20/11/2021");
     const time = ref("00:00:00");
-    const city = ref(getCurrentSetLocation());
+    const city = ref(getCurrentSetWilaya() + ", " + getCurrentSetCity());
 
     // Function to get the time
     function getTime() {

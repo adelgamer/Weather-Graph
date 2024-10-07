@@ -29,17 +29,23 @@ function getLocalStorageCoordinate() {
   };
 }
 
-function getCurrentSetLocation() {
+function getCurrentSetCity() {
   return localStorage.getItem("city");
 }
 
+function getCurrentSetWilaya() {
+  return localStorage.getItem("wilaya");
+}
+
 function CheckLocationInLocalStorage() {
+  const wilaya = localStorage.getItem("wilaya");
   const city = localStorage.getItem("city");
   const lat = localStorage.getItem("lat");
   const lon = localStorage.getItem("lon");
 
-  if (!city) {
+  if (!city || !wilaya) {
     localStorage.setItem("city", "Alger");
+    localStorage.setItem("wilaya", "Alger");
     // make an api call to get the lat and lon
     console.log("City is undefined");
     getCoordinates("Alger");
@@ -53,9 +59,54 @@ function CheckLocationInLocalStorage() {
   }
 }
 
+// Load list of wilayas
+function getWilayaList() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get("/algeria_cities.json")
+      .then((response) => {
+        const list_of_wilayas = [];
+        response.data.forEach((element) => {
+          if (!list_of_wilayas.includes(element.wilaya_name_ascii)) {
+            list_of_wilayas.push(element.wilaya_name_ascii);
+          }
+        });
+        resolve(list_of_wilayas);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+function getBaladiaList(wilaya) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get("/algeria_cities.json")
+      .then((response) => {
+        const list_of_baladias = [];
+        response.data.forEach((element) => {
+          if (
+            !list_of_baladias.includes(element.commune_name_ascii) &&
+            element.wilaya_name_ascii === wilaya
+          ) {
+            list_of_baladias.push(element.commune_name_ascii);
+          }
+        });
+        resolve(list_of_baladias);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 export {
   getCoordinates,
   CheckLocationInLocalStorage,
   getLocalStorageCoordinate,
-  getCurrentSetLocation,
+  getCurrentSetCity,
+  getCurrentSetWilaya,
+  getWilayaList,
+  getBaladiaList,
 };

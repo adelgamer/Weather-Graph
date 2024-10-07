@@ -10,11 +10,44 @@
       <option value="celsius">Celsius</option>
       <option value="fahrenheit" selected>Fernheit</option>
     </select>
+
+    <h5 class="h5 mt-4">Choose a wilaya:</h5>
+    <select
+      v-model="currentWilaya"
+      class="form-select"
+      aria-label="Default select example"
+    >
+      <option :value="wilaya" :key="wilaya" v-for="wilaya in listOfWilaya">
+        {{ wilaya }}
+      </option>
+    </select>
+
+    <h5 class="h5 mt-4">Choose a Baladia:</h5>
+    <select
+      v-model="currentCity"
+      class="form-select"
+      aria-label="Default select example"
+    >
+      <option v-for="city in listOfCities" :key="city" :value="city">
+        {{ city }}
+      </option>
+    </select>
   </div>
 </template>
 <script setup>
 import { ref, watch } from "vue";
+import {
+  getWilayaList,
+  getBaladiaList,
+  getCurrentSetWilaya,
+  getCurrentSetCity,
+} from "../utilities/utils";
+
 let temperatureUnit = ref("celsius");
+let listOfWilaya = ref([]);
+let listOfCities = ref([]);
+let currentWilaya = ref(getCurrentSetWilaya());
+let currentCity = ref(getCurrentSetCity());
 
 // Trying to get the current temperature unit from local storage
 if (localStorage.getItem("temperatureUnit")) {
@@ -29,4 +62,33 @@ function setTemperatureUnit() {
 }
 
 watch(temperatureUnit, setTemperatureUnit);
+watch(currentWilaya, () => {
+  getWilayaList().then((response) => {
+    listOfWilaya.value = response;
+  });
+
+  getBaladiaList(currentWilaya.value).then((response) => {
+    listOfCities.value = response;
+
+    // Preselecting a city
+    if (!response.includes(getCurrentSetCity())) {
+      console.log(getCurrentSetCity());
+      currentCity.value = response[0];
+    }
+  });
+});
+
+getWilayaList().then((response) => {
+  listOfWilaya.value = response;
+});
+
+getBaladiaList(currentWilaya.value).then((response) => {
+  listOfCities.value = response;
+
+  // Preselecting a city
+  if (!response.includes(getCurrentSetCity())) {
+    console.log(getCurrentSetCity());
+    currentCity.value = response[0];
+  }
+});
 </script>
