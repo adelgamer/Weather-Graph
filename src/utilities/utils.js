@@ -40,22 +40,15 @@ function getCurrentSetWilaya() {
 function CheckLocationInLocalStorage() {
   const wilaya = localStorage.getItem("wilaya");
   const city = localStorage.getItem("city");
-  const lat = localStorage.getItem("lat");
-  const lon = localStorage.getItem("lon");
 
   if (!city || !wilaya) {
     localStorage.setItem("city", "Alger");
     localStorage.setItem("wilaya", "Alger");
     // make an api call to get the lat and lon
-    console.log("City is undefined");
     getCoordinates("Alger");
   } else {
-    console.log("City is defined 1");
-    if (!lat || !lon || lat === "undefined" || lon === "undefined") {
-      // Make an api request to get lat and long
-      console.log("City is defined");
-      getCoordinates(city);
-    }
+    // Make an api request to get lat and long
+    getCoordinates(city);
   }
 }
 
@@ -101,6 +94,12 @@ function getBaladiaList(wilaya) {
   });
 }
 
+function saveLocation(currentWilaya, currentCity) {
+  localStorage.setItem("city", currentWilaya);
+  localStorage.setItem("wilaya", currentCity);
+  CheckLocationInLocalStorage();
+}
+
 export {
   getCoordinates,
   CheckLocationInLocalStorage,
@@ -109,4 +108,5 @@ export {
   getCurrentSetWilaya,
   getWilayaList,
   getBaladiaList,
+  saveLocation,
 };
