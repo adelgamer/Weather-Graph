@@ -9,7 +9,7 @@
         <router-link style="text-decoration: none" to="/">
           <a class="navbar-brand" style="color: aliceblue; font-weight: 500">
             <img
-              src="./assets/logo.png"
+              src="./assets/cloudy.png"
               alt="Logo"
               width="30"
               height="24"
