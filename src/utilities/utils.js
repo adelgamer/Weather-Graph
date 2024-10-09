@@ -1,4 +1,17 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
 
 function getCoordinates(city) {
   console.log("Inside get coordinate");
@@ -98,6 +111,10 @@ function saveLocation(currentWilaya, currentCity) {
   localStorage.setItem("city", currentWilaya);
   localStorage.setItem("wilaya", currentCity);
   CheckLocationInLocalStorage();
+  Toast.fire({
+    icon: "success",
+    title: `Location is changed to ${currentCity}, ${currentWilaya}`,
+  });
 }
 
 export {
